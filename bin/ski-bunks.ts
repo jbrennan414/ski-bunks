@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { SkiBunksStack } from '../lib/ski-bunks-stack';
+import { SkiBunkBackend } from '../lib/ski-bunks-stack';
 
 const app = new cdk.App();
-new SkiBunksStack(app, 'SkiBunksStack', {
+new SkiBunkBackend(app, 'SkiBunkBackend', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

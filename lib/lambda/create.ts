@@ -10,7 +10,13 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 
     const params: DynamoDB.DocumentClient.PutItemInput = {
       TableName: process.env.DYNAMO_TABLE_NAME!,
-      Item: input,
+      Item: {
+        bed_id: "queen_1",
+        date: "20231004",
+        attributes: {
+          user_id:"telbe_telberson"
+        },
+      },
     };
 
     await dynamoDB.put(params).promise();
