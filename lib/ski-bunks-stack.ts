@@ -61,7 +61,9 @@ export class SkiBunkBackend extends cdk.Stack {
 
     const items = api.root.addResource('items');
     items.addMethod('POST', new aws_apigateway.LambdaIntegration(createLambda));
-    items.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda));
+    items.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda), {
+      authorizationType: aws_apigateway.AuthorizationType.NONE,
+    });
 
     const singleItem = items.addResource('{id}');
     singleItem.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda));
