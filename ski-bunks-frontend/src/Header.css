@@ -1,0 +1,17 @@
+.header {
+    display:flex;
+}
+
+#header-logo {
+    width: 128px;
+}
+
+#header-profile-pic {
+    border-radius: 50px;
+    width: 45%;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+}

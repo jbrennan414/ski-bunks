@@ -1,5 +1,6 @@
 import React from 'react';
 import './Calendar.css';
+import { Outlet, Link } from "react-router-dom";
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -50,8 +51,8 @@ class Calendar extends React.Component {
           cells.push(<div key={`empty-${j}`} className="cell empty-cell"></div>);
         } else if (day <= daysInMonth) {
           cells.push(
-            <div key={day} className="cell" onClick={() => this.renderDay(day)}>
-              {day}
+            <div id={day} key={day} className="cell" onClick={() => this.renderDay(day)}>
+              <Link to={`/day/${year}${month}${day}`}>{day}</Link>
             </div>
           );
           day++;
