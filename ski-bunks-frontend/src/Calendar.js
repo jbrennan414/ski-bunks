@@ -5,12 +5,19 @@ import axios from 'axios';
 
 export default function Calendar(props) {
 
-  const [month, setMonth] = useState(props.month);   
+  const year = new Date().getFullYear(); // You can change this to the desired year
+  
+  const monthArray = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+    'October', 'November', 'December'
+  ];
+
+  const [month, setMonth] = useState(new Date().getMonth() + 1);   
   const [availableBeds, setAvailableBeds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get("https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod/")
+    axios.get(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?month=${month}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
@@ -19,6 +26,10 @@ export default function Calendar(props) {
     });
   }, [month]);
 
+
+  const daysInMonth = getDaysInMonth(month, year);
+  const startingDay = getStartingDay(month, year);
+  const readableMonth = monthArray[month - 1];
 
   function getDaysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
@@ -30,18 +41,6 @@ export default function Calendar(props) {
     // Ensure the grid starts on Sunday
     return startingDay === 0 ? 7 : startingDay;
   }
-  
-  const year = new Date().getFullYear(); // You can change this to the desired year
-
-  const daysInMonth = getDaysInMonth(month, year);
-  const startingDay = getStartingDay(month, year);
-
-  const monthArray = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-    'October', 'November', 'December'
-  ];
-
-  const readableMonth = monthArray[month - 1];
 
   const cells = [];
   let day = 1;
@@ -89,9 +88,15 @@ export default function Calendar(props) {
   return (
     <div className="calendar">
       <div>
-        <button onClick={() => setMonth(month - 1)}>Previous Month</button>
+        <button onClick={() => {
+          setIsLoading(true)
+          setMonth(month - 1)
+        }}>Previous Month</button>
         <h2>{readableMonth}</h2>
-        <button onClick={() => setMonth( month + 1)}>Next Month</button>
+        <button onClick={() => { 
+          setIsLoading(true)
+          setMonth( month + 1)
+        }}>Next Month</button>
       </div>
       <div className="calendar-grid">{cells}</div>
     </div>
