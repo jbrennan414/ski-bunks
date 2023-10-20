@@ -30,6 +30,7 @@ export class SkiBunkBackend extends cdk.Stack {
     dynamoTable.grantFullAccess(readLambda);
 
     // Create an API Gateway
+    // disable cors for now
     const api = new aws_apigateway.RestApi(this, 'SkiBunksAPI');
 
     // Define a resource and a GET method to access the Lambda function
