@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
-import React, { useState, useEffect, useParams } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAuth0 } from "@auth0/auth0-react";
+
 import './Calendar.css';
 import axios from 'axios';
+import Bed from "./Bed";
 
 export default function Day() {
 
   const [openBeds, setOpenBeds] = useState([]);
+  const [selectedBed, setSelectedBed] = useState(null);
+
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   const allBeds = [
     "king1_1",
@@ -19,13 +25,26 @@ export default function Day() {
     "couch"
   ];
 
+  function bookStay() {
+    
+    const date = window.location.pathname.split("/")[2];
+    const bed_id = selectedBed;
+    const userId = {
+      user_email: user.email,
+      user_name: user.name,
+      user_picture: user.picture 
+    }
+
+
+  }
+
   function renderBed(bed_id) {
 
-    const bedStatus = !openBeds.includes(bed_id) && "❌"
+    const isOccupied = !openBeds.includes(bed_id)
 
     return (
       <div key={bed_id}>
-        <p>{bedStatus} {bed_id}</p>
+        <Bed bed_id={bed_id} isOccupied={isOccupied} setSelectedBed={setSelectedBed}/>
       </div>
     )
   }
@@ -55,6 +74,21 @@ export default function Day() {
         {allBeds.map((bed) => {
           return renderBed(bed)
         })}  
+
+        { isAuthenticated ? (
+            <button 
+              onClick={() => { bookStay() }}
+              disabled={selectedBed == null}
+            >
+              {`Book my stay: ${selectedBed}`}
+            </button>
+          ) : (
+            <button 
+              disabled={true}
+            >
+              {`Log in to book ${selectedBed}` }
+            </button>
+          )}
     </div>
   )
 }
