@@ -29,11 +29,21 @@ export default function Day() {
     
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
-    const userId = {
-      user_email: user.email,
-      user_name: user.name,
-      user_picture: user.picture 
-    }
+
+
+    axios.post(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod`, {
+      date,
+      bed_id,
+      email: user.email,
+      name: user.name,
+      picture: user.picture
+    })
+      .then((response) => {
+        console.log(response)
+        setOpenBeds(response.data.openBeds);
+    }).catch((error) => {
+      console.log("ERRRRRRROR" , error);
+    });
 
 
   }
