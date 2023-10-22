@@ -57,12 +57,11 @@ export default function Calendar(props) {
     setMonth(month);
   }
 
-
   const cells = [];
   let day = 1;
   let doubleDate = day;
 
-  if (isLoading) {
+  if (isLoading || availableBeds.length === 0) {
     return <div>Loading...</div>;
   }
   // Create cells for each day in the calendar

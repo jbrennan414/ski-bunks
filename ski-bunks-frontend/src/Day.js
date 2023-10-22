@@ -11,6 +11,7 @@ export default function Day() {
   const [openBeds, setOpenBeds] = useState([]);
   const [selectedBed, setSelectedBed] = useState(null);
   const [pageIsLoading, setPageIsLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
 
@@ -59,7 +60,12 @@ export default function Day() {
 
     return (
       <div key={bed_id}>
-        <Bed bed_id={bed_id} isOccupied={isOccupied} setSelectedBed={setSelectedBed}/>
+        <Bed 
+          bed_id={bed_id} 
+          isOccupied={isOccupied} 
+          occupantPhoto="https://lh3.googleusercontent.com/a/ACg8ocLe1bqDTfA5vNQLPaOiNjEDkUcLh4lChLfA1diQJEQxNdM=s96-c" 
+          setSelectedBed={setSelectedBed}
+        />
       </div>
     )
   }
@@ -77,6 +83,7 @@ export default function Day() {
         console.log(response)
         setOpenBeds(response.data.openBeds);
         setPageIsLoading(false)
+        setSelectedDate(fullpath)
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
       setPageIsLoading(false)
