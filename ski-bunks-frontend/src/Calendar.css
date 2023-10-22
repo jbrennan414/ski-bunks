@@ -10,6 +10,7 @@
 
 .empty-cell {
   background-color: #f1f1f1;
+  opacity: 0.0;
 }
 
 .calendar-grid {
@@ -29,4 +30,10 @@
 
 .green {
   background-color: green;
+}
+
+.month-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

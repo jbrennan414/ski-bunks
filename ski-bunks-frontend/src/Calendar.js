@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import './Calendar.css';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 export default function Calendar(props) {
 
@@ -102,16 +104,17 @@ export default function Calendar(props) {
 
   return (
     <div className="calendar">
-      <div>
-        <button onClick={() => {
+      <div className="month-nav">
+        <NavigateBeforeIcon onClick={() => {
           setIsLoading(true)
           updateMonth(month - 1)
-        }}>Previous Month</button>
+        }}/>
+
         <h2>{readableMonth}</h2>
-        <button onClick={() => { 
+        <NavigateNextIcon onClick={() => {
           setIsLoading(true)
           updateMonth( month + 1)
-        }}>Next Month</button>
+        }}/>
       </div>
       <div className="calendar-grid">{cells}</div>
     </div>
