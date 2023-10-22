@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react'
 import { useAuth0 } from "@auth0/auth0-react";
+import './Day.css';
 
-import './Calendar.css';
 import axios from 'axios';
 import Bed from "./Bed";
 
@@ -59,14 +59,13 @@ export default function Day() {
     const isOccupied = !openBeds.includes(bed_id)
 
     return (
-      <div key={bed_id}>
         <Bed 
           bed_id={bed_id} 
+          key={bed_id}
           isOccupied={isOccupied} 
           occupantPhoto="https://lh3.googleusercontent.com/a/ACg8ocLe1bqDTfA5vNQLPaOiNjEDkUcLh4lChLfA1diQJEQxNdM=s96-c" 
           setSelectedBed={setSelectedBed}
         />
-      </div>
     )
   }
 
@@ -96,7 +95,7 @@ export default function Day() {
       <Link to="/">Back</Link>
 
       {pageIsLoading ? <div>Loading...</div> : (
-        <div>
+        <div className="bed-container">
 
           {allBeds.map((bed) => {
             return renderBed(bed)

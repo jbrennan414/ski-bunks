@@ -11,13 +11,16 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Reservations from './Reservations';
 
 export default function Header() {
+  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
   const { logout } = useAuth0();
   const { loginWithRedirect } = useAuth0();
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,8 +64,7 @@ export default function Header() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>My Reservations</MenuItem>
-                { isLoading || !isAuthenticated && (<p>log in</p>)}
+                <MenuItem>My Reservations</MenuItem>
                 <MenuItem onClick={() => logout({ logoutParams: {returnTo: window.location.origin }})}>Log Out</MenuItem>
               </Menu>
             </div>

@@ -36,8 +36,18 @@ export class SkiBunkBackend extends cdk.Stack {
         },
     });
 
+    const deleteLambda = new aws_lambda.Function(this, "DeleteLambda", {
+      runtime: aws_lambda.Runtime.NODEJS_18_X,
+      code: aws_lambda.Code.fromAsset("lib/lambda"),
+      handler: "delete.main",
+        environment: {
+          DYNAMO_TABLE_NAME: dynamoTable.tableName,
+        },
+    });
+
     dynamoTable.grantFullAccess(readLambda);
     dynamoTable.grantFullAccess(createLambda);
+    dynamoTable.grantFullAccess(deleteLambda);
 
     const api = new aws_apigateway.RestApi(this, 'SkiBunksAPI', {
       defaultCorsPreflightOptions: {
@@ -49,6 +59,7 @@ export class SkiBunkBackend extends cdk.Stack {
     // Define a resource and a GET method to access the Lambda function
     api.root.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda));
     api.root.addMethod('POST', new aws_apigateway.LambdaIntegration(createLambda));
+    api.root.addMethod('DELETE', new aws_apigateway.LambdaIntegration(deleteLambda));
   }
 }
 
