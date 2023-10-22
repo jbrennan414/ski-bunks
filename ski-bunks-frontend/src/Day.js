@@ -10,6 +10,7 @@ export default function Day() {
 
   const [openBeds, setOpenBeds] = useState([]);
   const [selectedBed, setSelectedBed] = useState(null);
+  const [pageIsLoading, setPageIsLoading] = useState(true);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
 
@@ -26,10 +27,9 @@ export default function Day() {
   ];
 
   function bookStay() {
-    
+    setPageIsLoading(true);
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
-
 
     axios.post(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod`, {
       date,
@@ -40,12 +40,17 @@ export default function Day() {
     })
       .then((response) => {
         console.log(response)
-        setOpenBeds(response.data.openBeds);
+
+        let newOpenBeds = openBeds;
+        newOpenBeds.splice(newOpenBeds.indexOf(bed_id), 1);
+
+        setOpenBeds(newOpenBeds);
+        setPageIsLoading(false)
+
     }).catch((error) => {
+      setPageIsLoading(false)
       console.log("ERRRRRRROR" , error);
     });
-
-
   }
 
   function renderBed(bed_id) {
@@ -60,7 +65,6 @@ export default function Day() {
   }
 
   useEffect(() => {
-    
     // I think I can improve this in react router
     // but this will work for now
     const fullpath = window.location.pathname.split("/")[2];
@@ -72,8 +76,10 @@ export default function Day() {
       .then((response) => {
         console.log(response)
         setOpenBeds(response.data.openBeds);
+        setPageIsLoading(false)
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
+      setPageIsLoading(false)
     });
   }, []);
 
@@ -81,11 +87,15 @@ export default function Day() {
   return (
     <div>
       <Link to="/">Back</Link>
-        {allBeds.map((bed) => {
-          return renderBed(bed)
-        })}  
 
-        { isAuthenticated ? (
+      {pageIsLoading ? <div>Loading...</div> : (
+        <div>
+
+          {allBeds.map((bed) => {
+            return renderBed(bed)
+          })}  
+
+          { isAuthenticated ? (
             <button 
               onClick={() => { bookStay() }}
               disabled={selectedBed == null}
@@ -99,6 +109,10 @@ export default function Day() {
               {`Log in to book ${selectedBed}` }
             </button>
           )}
+        </div>
+      )}
+
+
     </div>
   )
 }
