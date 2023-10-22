@@ -5,7 +5,7 @@ export default function Bed(props) {
   return (
     <div>
         <button onClick={() => props.setSelectedBed(props.bed_id)} disabled={ false }>
-            {props.isOccupied && "❌"}{props.bed_id}
+            {props.isOccupied && <img src={`${props.occupantPhoto}`} />}{props.bed_id}
         </button>
     </div>
   )
