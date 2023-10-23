@@ -10,7 +10,7 @@ import Bed from "./Bed";
 function isGuest(email) {
   console.log("foobar123", email)
   const lesees = [
-    "bre1nnanj414@gmail.com"
+    "brennsanj414@gmail.com"
   ]
 
   return lesees.indexOf(email) === -1;

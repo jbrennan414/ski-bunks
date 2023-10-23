@@ -33,9 +33,11 @@ export default function Header(props) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            SkiBunks
-          </Typography>
+          <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              SkiBunks
+            </Typography>
+          </Link>
           {isAuthenticated ? (
             <div>
               <IconButton
@@ -64,7 +66,7 @@ export default function Header(props) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={() => handleClose()}>
-                <Link to="/reservations">My Reservations</Link>
+                <Link to="/reservations" style={{ textDecoration: 'none', color: 'black'}}>My Reservations</Link>
                   </MenuItem>
                 <MenuItem onClick={() => logout({ logoutParams: {returnTo: window.location.origin }})}>Log Out</MenuItem>
               </Menu>

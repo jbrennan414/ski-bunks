@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { SkiBunkBackend } from '../lib/ski-bunks-stack';
+import { SkiBunkBackend } from '../lib/ski-bunks-backend';
 
 const app = new cdk.App();
 new SkiBunkBackend(app, 'SkiBunkBackend', {
