@@ -10,11 +10,10 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
-import Reservations from './Reservations';
 
-export default function Header() {
-  const [auth, setAuth] = React.useState(true);
+export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -64,7 +63,9 @@ export default function Header() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem>My Reservations</MenuItem>
+                <MenuItem onClick={() => handleClose()}>
+                <Link to="/reservations">My Reservations</Link>
+                  </MenuItem>
                 <MenuItem onClick={() => logout({ logoutParams: {returnTo: window.location.origin }})}>Log Out</MenuItem>
               </Menu>
             </div>

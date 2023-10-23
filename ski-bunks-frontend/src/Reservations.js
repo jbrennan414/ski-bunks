@@ -13,27 +13,40 @@ import Button from '@mui/material/Button';
 export default function Reservations(props) {
 
   const [reservations, setReservations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
 
     axios.get(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
+        setIsLoading(false);
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
+      setIsLoading(false);
     });
-  }, [user]);
+  }, []);
 
-  function deleteReservation(id) {
-    console.log("OMG THAT ORKED", id)
-    axios.delete(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?id=${id.id}`)
+  function deleteReservation(reservationToRemove) {
+    setIsLoading(true);
+    axios.delete(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
-        console.log("response", response)
-        // setReservations(response.data);
+
+        let newReservations = reservations;
+
+        newReservations.forEach(reservation => {
+          if (reservation.bed_id === reservationToRemove.bed_id && reservation.date === reservationToRemove.date) {
+            newReservations.splice(newReservations.indexOf(reservation), 1)
+          }
+        })
+
+        setReservations(newReservations);
+        setIsLoading(false);
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
+      setIsLoading(false);
     });
   }
 
@@ -55,30 +68,33 @@ export default function Reservations(props) {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{  }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell align="right">Bed</TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {reservations.map((row, i) => (
-            <TableRow
-              key={i}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {parseDateString(row.date)}
-              </TableCell>
-              <TableCell align="right">{row.bed_id}</TableCell>
-              <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>
+    <div>
+    {isLoading && <div>Loading...</div>}
+      <TableContainer component={Paper}>
+        <Table sx={{  }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Date</TableCell>
+              <TableCell align="right">Bed</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {reservations.map((row, i) => (
+              <TableRow
+                key={i}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {parseDateString(row.date)}
+                </TableCell>
+                <TableCell align="right">{row.bed_id}</TableCell>
+                <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }

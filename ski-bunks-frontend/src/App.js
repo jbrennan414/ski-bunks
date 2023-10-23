@@ -15,8 +15,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route index element={<Calendar month={month} setMonth={setMonth} />} />
           <Route path="day/*" element={<Day />} /> 

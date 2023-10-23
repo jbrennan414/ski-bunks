@@ -2,9 +2,20 @@ import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react'
 import { useAuth0 } from "@auth0/auth0-react";
 import './Day.css';
+import Button from '@mui/material/Button';
 
 import axios from 'axios';
 import Bed from "./Bed";
+
+function isGuest(email) {
+  console.log("foobar123", email)
+  const lesees = [
+    "bre1nnanj414@gmail.com"
+  ]
+
+  return lesees.indexOf(email) === -1;
+}
+
 
 export default function Day() {
 
@@ -28,6 +39,12 @@ export default function Day() {
   ];
 
   function bookStay() {
+
+    if (isGuest(user.email)) {
+      console.log("you are a guest")
+      return
+    }
+
     setPageIsLoading(true);
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
@@ -102,12 +119,13 @@ export default function Day() {
           })}  
 
           { isAuthenticated ? (
-            <button 
+            <Button
+              variant="contained"
               onClick={() => { bookStay() }}
               disabled={selectedBed == null}
             >
-              {`Book my stay: ${selectedBed}`}
-            </button>
+              {`Book my stay`}
+            </Button>
           ) : (
             <button 
               disabled={true}
