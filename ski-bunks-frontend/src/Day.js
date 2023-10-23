@@ -10,7 +10,7 @@ import Bed from "./Bed";
 function isGuest(email) {
   console.log("foobar123", email)
   const lesees = [
-    "brennsanj414@gmail.com"
+    "brennanj414@gmail.com"
   ]
 
   return lesees.indexOf(email) === -1;
@@ -49,7 +49,7 @@ export default function Day() {
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
 
-    axios.post(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod`, {
+    axios.post(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod`, {
       date,
       bed_id,
       email: user.email,
@@ -94,7 +94,7 @@ export default function Day() {
     const month = fullpath.substring(4, 6);
     const day = fullpath.substring(6, 8);
 
-    axios.get(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
+    axios.get(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
       .then((response) => {
         console.log(response)
         setOpenBeds(response.data.openBeds);

@@ -19,7 +19,7 @@ export default function Reservations(props) {
 
   useEffect(() => {
 
-    axios.get(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
         setIsLoading(false);
@@ -31,7 +31,7 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setIsLoading(true);
-    axios.delete(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.date}&bed_id=${reservationToRemove.bed_id}`)
+    axios.delete(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
 
         let newReservations = reservations;

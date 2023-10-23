@@ -18,7 +18,7 @@ export default function Calendar(props) {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get(`https://fi9au6homh.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+    axios.get(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
@@ -93,7 +93,7 @@ export default function Calendar(props) {
         cells.push(
           <div id={day} key={day} className={`cell ${colorClass}`}>
             <Link to={`/day/${year}${month}${doubleDate}`}>{day}</Link>
-            <p>{bedsAvailableToday}</p>
+            {/* <p>{bedsAvailableToday}</p> */}
           </div>
         );
         day++;          
