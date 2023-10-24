@@ -1,11 +1,12 @@
 /* Add this CSS to your stylesheets */
 .cell {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #ddd;
+  border-radius: 30%;
 }
 
 .empty-cell {

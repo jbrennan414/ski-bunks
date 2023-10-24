@@ -4,13 +4,9 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { getMonthFromInteger } from './utils';
 
 export default function Calendar(props) {
-
-  const monthArray = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-    'October', 'November', 'December'
-  ];
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);   
   const [year, setYear] = useState(new Date().getFullYear());
@@ -18,7 +14,7 @@ export default function Calendar(props) {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get(`https://7pp3bztjid.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+    axios.get(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
@@ -30,7 +26,7 @@ export default function Calendar(props) {
 
   const daysInMonth = getDaysInMonth(month, year);
   const startingDay = getStartingDay(month, year);
-  const readableMonth = monthArray[month - 1];
+  const readableMonth = getMonthFromInteger(month - 1);
 
   function getDaysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
@@ -44,19 +40,18 @@ export default function Calendar(props) {
   }
 
   function updateMonth(month){
+
     if (month === 13) {
       setMonth(1);
       setYear(year + 1);
       return;
-    } 
-
-    if (month === 1) {
+    } else if (month === 0) {
       setMonth(12);
       setYear(year - 1);
       return;
+    } else {
+      setMonth(month);
     }
-
-    setMonth(month);
   }
 
   const cells = [];
@@ -66,11 +61,21 @@ export default function Calendar(props) {
   if (isLoading || availableBeds.length === 0) {
     return <div>Loading...</div>;
   }
-  // Create cells for each day in the calendar
+
+  cells.push(<div key={"s"} className="cell">S</div>)
+  cells.push(<div key={"m"} className='cell'>M</div>)
+  cells.push(<div key={"t"} className='cell'>T</div>)
+  cells.push(<div key={"w"}className='cell'>W</div>)
+  cells.push(<div key={"th"} className='cell'>Th</div>)
+  cells.push(<div key={"f"} className='cell'>F</div>)
+  cells.push(<div key={"sat"} className='cell'>S</div>)
+
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 7; j++) {
       if (i === 0 && j < startingDay) {
-        cells.push(<div key={`empty-${j}`} className="cell empty-cell"></div>);
+        if (startingDay !== 7) {
+          cells.push(<div key={`empty-${j}`} className="cell empty-cell"></div>);
+        }
       } else if (day <= daysInMonth) {
 
         if (day < 10) { 
@@ -92,8 +97,7 @@ export default function Calendar(props) {
 
         cells.push(
           <div id={day} key={day} className={`cell ${colorClass}`}>
-            <Link to={`/day/${year}${month}${doubleDate}`}>{day}</Link>
-            {/* <p>{bedsAvailableToday}</p> */}
+            <Link style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${month}${doubleDate}`}>{day}</Link>
           </div>
         );
         day++;          
