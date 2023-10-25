@@ -32,7 +32,7 @@ export default function Header(props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar style={{ display:"flex", justifyContent:'space-between' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               SkiBunks

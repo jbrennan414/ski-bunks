@@ -10,7 +10,7 @@ import Bed from "./Bed";
 
 function isGuest(email) {
   const lesees = [
-    "bren1nanj414@gmail.com"
+    "brennanj414@gmail.com"
   ]
 
   return lesees.indexOf(email) === -1;
@@ -20,6 +20,7 @@ function isGuest(email) {
 export default function Day() {
 
   const [openBeds, setOpenBeds] = useState([]);
+  const [occupiedBeds, setOccupiedBeds] = useState([]);
   const [selectedBed, setSelectedBed] = useState(null);
   const [pageIsLoading, setPageIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -62,6 +63,15 @@ export default function Day() {
         let newOpenBeds = openBeds;
         newOpenBeds.splice(newOpenBeds.indexOf(bed_id), 1);
 
+        // this is probably bad...but whatever
+        // what I mean is that on a post, we should probably return the update object
+        let newOccupiedBeds = occupiedBeds;
+        newOccupiedBeds[bed_id] = {
+          user_picture: user.picture,
+          user_name: user.name
+        }
+
+        setOccupiedBeds(newOccupiedBeds);
         setOpenBeds(newOpenBeds);
         setPageIsLoading(false)
 
@@ -73,6 +83,8 @@ export default function Day() {
 
   function renderBed(bed_id) {
 
+    if (pageIsLoading) { return <p>Loading...</p>}
+
     const isOccupied = !openBeds.includes(bed_id)
 
     return (
@@ -80,7 +92,7 @@ export default function Day() {
           bed_id={bed_id} 
           key={bed_id}
           isOccupied={isOccupied} 
-          occupantPhoto="https://lh3.googleusercontent.com/a/ACg8ocLe1bqDTfA5vNQLPaOiNjEDkUcLh4lChLfA1diQJEQxNdM=s96-c" 
+          occupantPhoto= {isOccupied ? occupiedBeds[bed_id].user_picture : null}
           setSelectedBed={setSelectedBed}
         />
     )
@@ -97,6 +109,7 @@ export default function Day() {
     axios.get(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
       .then((response) => {
         console.log(response)
+        setOccupiedBeds(response.data.occupiedBeds);
         setOpenBeds(response.data.openBeds);
         setPageIsLoading(false)
         setSelectedDate(fullpath)
@@ -121,7 +134,7 @@ export default function Day() {
               return renderBed(bed)
             })}  
 
-            { isAuthenticated ? (
+            { isAuthenticated ? ( 
               <Button
                 variant="contained"
                 onClick={() => { bookStay() }}
@@ -129,11 +142,11 @@ export default function Day() {
               >
                 {`Book my stay`}
               </Button>
-            ) : (
+                          ) : (
               <button 
                 disabled={true}
               >
-                {`Log in to book ${selectedBed}` }
+                {`Log in to book` }
               </button>
             )}
           </div>
