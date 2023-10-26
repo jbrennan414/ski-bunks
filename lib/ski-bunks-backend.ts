@@ -9,14 +9,20 @@ export class SkiBunkBackend extends cdk.Stack {
     // Create a DynamoDB table
     const dynamoTable = new aws_dynamodb.Table(this, 'SkiBunkDbTable', {
       partitionKey: { name: 'bed_id', type: aws_dynamodb.AttributeType.STRING },
-      sortKey: { name: 'date', type: aws_dynamodb.AttributeType.STRING},
+      sortKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING},
       removalPolicy: cdk.RemovalPolicy.DESTROY, // Not recommended for production
     });
 
     dynamoTable.addGlobalSecondaryIndex({
       indexName: 'date-index',
-      partitionKey: { name: 'date', type: aws_dynamodb.AttributeType.STRING },
+      partitionKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING },
     });
+
+    dynamoTable.addGlobalSecondaryIndex({
+      indexName:'date-user_email-index',
+      partitionKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING },
+      sortKey: { name: 'user_email', type: aws_dynamodb.AttributeType.STRING },
+    })
 
     const readLambda = new aws_lambda.Function(this, "ReadLambda", {
       runtime: aws_lambda.Runtime.NODEJS_18_X,

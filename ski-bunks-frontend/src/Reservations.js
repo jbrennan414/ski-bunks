@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 
 export default function Reservations(props) {
 
@@ -21,7 +14,7 @@ export default function Reservations(props) {
 
     if (isLoading) return;
 
-    axios.get(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
         setpageIsLoading(false);
@@ -33,13 +26,13 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    axios.delete(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.date}&bed_id=${reservationToRemove.bed_id}`)
+    axios.delete(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
 
         let newReservations = reservations;
 
         newReservations.forEach(reservation => {
-          if (reservation.bed_id === reservationToRemove.bed_id && reservation.date === reservationToRemove.date) {
+          if (reservation.bed_id === reservationToRemove.bed_id && reservation.reservation_date === reservationToRemove.reservation_date) {
             newReservations.splice(newReservations.indexOf(reservation), 1)
           }
         })
@@ -89,7 +82,7 @@ export default function Reservations(props) {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {parseDateString(row.date)}
+                    {parseDateString(row.reservation_date)}
                   </TableCell>
                   <TableCell align="right">{row.bed_id}</TableCell>
                   <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react'
 import { useAuth0 } from "@auth0/auth0-react";
 import './Day.css';
-import Button from '@mui/material/Button';
+import { Button, Snackbar, Alert as MuiAlert } from '@mui/material';
 import { getDayOfWeek, getMonth, getDate, getYear } from './utils';
 
 import axios from 'axios';
@@ -17,6 +17,10 @@ function isGuest(email) {
 }
 
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Day() {
 
   const [openBeds, setOpenBeds] = useState([]);
@@ -24,6 +28,8 @@ export default function Day() {
   const [selectedBed, setSelectedBed] = useState(null);
   const [pageIsLoading, setPageIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [shouldDisplayError, setShouldDisplayError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
 
@@ -39,6 +45,15 @@ export default function Day() {
     "couch"
   ];
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setShouldDisplayError(false);
+  };
+
+
   function bookStay() {
 
     if (isGuest(user.email)) {
@@ -50,8 +65,8 @@ export default function Day() {
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
 
-    axios.post(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod`, {
-      date,
+    axios.post(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod`, {
+      reservation_date: date,
       bed_id,
       email: user.email,
       name: user.name,
@@ -77,6 +92,8 @@ export default function Day() {
 
     }).catch((error) => {
       setPageIsLoading(false)
+      setShouldDisplayError(true)
+      setErrorMessage(error.response.data.message)
       console.log("ERRRRRRROR" , error);
     });
   }
@@ -106,7 +123,7 @@ export default function Day() {
     const month = fullpath.substring(4, 6);
     const day = fullpath.substring(6, 8);
 
-    axios.get(`https://twx69ovt0b.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
+    axios.get(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
       .then((response) => {
         console.log(response)
         setOccupiedBeds(response.data.occupiedBeds);
@@ -142,17 +159,23 @@ export default function Day() {
               >
                 {`Book my stay`}
               </Button>
-                          ) : (
-              <button 
+            ) : (
+              <Button 
+                variant="contained"
                 disabled={true}
               >
-                {`Log in to book` }
-              </button>
+                {`Sign in to book` }
+              </Button>
             )}
           </div>
         </div>
       )}
 
+      <Snackbar open={shouldDisplayError} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            {errorMessage}
+          </Alert>
+      </Snackbar>
     </div>
   )
 }

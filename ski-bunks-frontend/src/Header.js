@@ -1,17 +1,9 @@
 import React from 'react'
 import './Header.css'
 import { useAuth0 } from "@auth0/auth0-react";
-import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
+import { Avatar, Chip, AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Menu from '@mui/material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
