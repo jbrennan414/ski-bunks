@@ -12,3 +12,7 @@ button {
 .bed {
     border: 1px solid lightgray;
 }
+
+.photo-container {
+    display:flex;
+}

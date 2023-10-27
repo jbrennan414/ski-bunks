@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import BedIcon from '@mui/icons-material/Bed';
 import { Avatar, Button } from '@mui/material';
+import { getBedName } from './utils';
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
@@ -45,8 +46,8 @@ export default function Bed(props) {
 
     const occupiedSpots = Object.keys(props.occupiedBeds).filter((bed) => bed.includes(props.bed_id));
 
-    occupiedSpots.forEach(spot => { 
-      photos.push(<Avatar src={props.occupiedBeds[spot].user_picture} alt="occupant photo" />)
+    occupiedSpots.forEach((spot, i) => { 
+      photos.push(<Avatar key={i} src={props.occupiedBeds[spot].user_picture} alt="occupant photo" />)
     })
 
     return photos
@@ -57,9 +58,12 @@ export default function Bed(props) {
     <ColorButton variant="contained" 
       startIcon={<BedIcon />} 
       onClick={() => props.setSelectedBed(props.bed_id)} 
-      disabled={ isBedFull(props.bed_id) } >
-      {props.bed_id}
-      {props.isOccupied && renderOccupantPhoto()}
+      disabled={ isBedFull(props.bed_id) } 
+    >
+      {getBedName(props.bed_id)}
+      <div className="photo-container">
+        {props.isOccupied && renderOccupantPhoto()}
+      </div>
     </ColorButton>
   );
 }

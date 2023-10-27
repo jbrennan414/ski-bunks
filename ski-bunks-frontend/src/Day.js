@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, forwardRef } from 'react'
 import { useAuth0 } from "@auth0/auth0-react";
 import './Day.css';
 import { Button, Snackbar, Alert as MuiAlert } from '@mui/material';
@@ -17,7 +17,7 @@ function isGuest(email) {
 }
 
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -142,28 +142,28 @@ export default function Day() {
         <p>{`${getDayOfWeek(selectedDate)} ${getMonth(selectedDate)} ${getDate(selectedDate)}, ${getYear(selectedDate)}`}</p>
 
           <div className="bed-container">
-
             {allBeds.map((bed) => {
               return renderBed(bed)
             })}  
-
-            { isAuthenticated ? ( 
-              <Button
-                variant="contained"
-                onClick={() => { bookStay() }}
-                disabled={selectedBed == null}
-              >
-                {`Book my stay`}
-              </Button>
-            ) : (
-              <Button 
-                variant="contained"
-                disabled={true}
-              >
-                {`Sign in to book` }
-              </Button>
-            )}
           </div>
+
+          { isAuthenticated ? ( 
+            <Button
+              variant="contained"
+              onClick={() => { bookStay() }}
+              disabled={selectedBed == null}
+            >
+              {`Book my stay`}
+            </Button>
+          ) : (
+            <Button 
+              variant="contained"
+              disabled={true}
+            >
+              {`Sign in to book` }
+            </Button>
+          )}
+
         </div>
       )}
 

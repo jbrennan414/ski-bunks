@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { getBedName } from './utils';
 
 export default function Reservations(props) {
 
@@ -84,7 +85,7 @@ export default function Reservations(props) {
                   <TableCell component="th" scope="row">
                     {parseDateString(row.reservation_date)}
                   </TableCell>
-                  <TableCell align="right">{row.bed_id}</TableCell>
+                  <TableCell align="right">{getBedName(row.bed_id)}</TableCell>
                   <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>
                 </TableRow>
               ))}

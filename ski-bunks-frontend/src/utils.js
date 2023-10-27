@@ -78,3 +78,19 @@ export const getYear = (fullpath) => {
 export const getMonthFromInteger = (monthInt) => {
     return months[monthInt];
 }
+
+export const getBedName = (bed_id) => {
+
+    if (bed_id.includes("king")) {
+        return "King";
+    } else if (bed_id.includes("queen")) {
+        return "Queen";
+    } else if (bed_id.includes("bunk")) {
+        return "Bunk Bed";
+    } else if (bed_id.includes("couch")) {
+        return "Couch";
+    } else {
+        return bed_id;
+    }
+
+}

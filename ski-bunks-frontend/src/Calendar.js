@@ -96,10 +96,13 @@ export default function Calendar(props) {
         }
 
         cells.push(
-          <div id={day} key={day} className={`cell ${colorClass}`}>
-            <Link style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${month}${doubleDate}`}>{day}</Link>
-          </div>
+          <Link key={day} style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${month}${doubleDate}`}>
+            <div id={day} className={`cell ${colorClass}`}>
+              {day}
+            </div>
+          </Link>
         );
+        
         day++;          
 
       }
