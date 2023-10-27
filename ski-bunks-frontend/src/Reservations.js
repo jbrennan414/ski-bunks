@@ -9,7 +9,7 @@ export default function Reservations(props) {
   const [reservations, setReservations] = useState([]);
   const [pageIsLoading, setpageIsLoading] = useState(true);
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
   useEffect(() => {
 
@@ -23,7 +23,7 @@ export default function Reservations(props) {
       console.log("ERRRRRRROR" , error);
       setpageIsLoading(false);
     });
-  }, [isLoading]);
+  }, [isLoading, user]);
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);

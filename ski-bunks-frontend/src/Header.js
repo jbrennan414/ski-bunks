@@ -8,7 +8,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const { logout } = useAuth0();
   const { loginWithRedirect } = useAuth0();
 

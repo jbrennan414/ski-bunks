@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { getMonthFromInteger } from './utils';
+import { getMonthFromInteger, isPastDate } from './utils';
 
 export default function Calendar(props) {
 
@@ -21,7 +21,7 @@ export default function Calendar(props) {
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
     });
-  }, [month]);
+  }, [month, year]);
 
 
   const daysInMonth = getDaysInMonth(month, year);
@@ -93,6 +93,10 @@ export default function Calendar(props) {
           colorClass = "yellow";
         } else {
           colorClass = "green";
+        }
+
+        if (isPastDate(`${year}${month < 10 ? "0" + month : month}${doubleDate}`)) {
+          colorClass = "gray";
         }
 
         cells.push(

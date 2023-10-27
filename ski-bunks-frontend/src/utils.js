@@ -94,3 +94,18 @@ export const getBedName = (bed_id) => {
     }
 
 }
+
+export const isPastDate = (fullpath) => {
+    
+    const year = fullpath.substring(0,4);
+    const month = fullpath.substring(4,6);
+    const day = fullpath.substring(6,8);
+
+    const date = new Date(`${month} ${day}, ${year}`).getTime();
+    
+    let dateObj = new Date();
+    let now = dateObj.setDate(dateObj.getDate() - 1);
+
+    return date < now;
+    
+}

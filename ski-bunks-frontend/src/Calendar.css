@@ -21,6 +21,10 @@
   padding: 10px;
 }
 
+.gray {
+  background-color: lightgray;
+}
+
 .red {
   background-color: red;
 }

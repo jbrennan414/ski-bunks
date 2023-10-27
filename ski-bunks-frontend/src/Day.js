@@ -31,7 +31,7 @@ export default function Day() {
   const [shouldDisplayError, setShouldDisplayError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   const allBeds = [
     "king1",
@@ -85,6 +85,7 @@ export default function Day() {
         setOccupiedBeds(newOccupiedBeds);
         setOpenBeds(newOpenBeds);
         setPageIsLoading(false)
+        setSelectedBed(null)
 
     }).catch((error) => {
       setPageIsLoading(false)
