@@ -3,7 +3,9 @@ import './Header.css'
 import { useAuth0 } from "@auth0/auth0-react";
 import { Avatar, Chip, AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu } from '@mui/material';
 import { Link } from 'react-router-dom';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { AccountCircle } from '@mui/icons-material';
+
+import Cart from './Cart';
 
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,7 +33,8 @@ export default function Header(props) {
             </Typography>
           </Link>
           {isAuthenticated ? (
-            <div>
+            <div className="cart-and-avatar">
+              <Cart />
               <IconButton
                 size="large"
                 aria-label="account of current user"
