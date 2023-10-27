@@ -20,13 +20,46 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Bed(props) {
+
+  function isBedFull(bed_id) {
+
+    let bedCapacity;
+
+    switch (bed_id) {
+      case 'couch':
+        bedCapacity = 1;
+        break;
+      default: 
+        bedCapacity = 2;
+        break;
+    }
+
+    const occupiedSpots = Object.keys(props.occupiedBeds).filter((bed) => bed.includes(props.bed_id));
+    const remainingSpots = bedCapacity - occupiedSpots.length;
+    return remainingSpots === 0;
+  }
+
+  function renderOccupantPhoto() {
+
+    let photos = [];
+
+    const occupiedSpots = Object.keys(props.occupiedBeds).filter((bed) => bed.includes(props.bed_id));
+
+    occupiedSpots.forEach(spot => { 
+      photos.push(<Avatar src={props.occupiedBeds[spot].user_picture} alt="occupant photo" />)
+    })
+
+    return photos
+
+  }
+
   return (
     <ColorButton variant="contained" 
       startIcon={<BedIcon />} 
       onClick={() => props.setSelectedBed(props.bed_id)} 
-      disabled={ props.isOccupied } >
+      disabled={ isBedFull(props.bed_id) } >
       {props.bed_id}
-      {props.isOccupied && <Avatar src={props.occupantPhoto} alt="occupant photo"  />}
+      {props.isOccupied && renderOccupantPhoto()}
     </ColorButton>
   );
 }

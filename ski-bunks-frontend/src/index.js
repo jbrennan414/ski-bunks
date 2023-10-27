@@ -15,7 +15,7 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <Auth0Provider
     domain="ski-bunks.us.auth0.com"
-    clientId="1sZbioDH03aRP3ag4U3WKpPXMgiHwCK1"
+    clientId="pgDqVwHh9HWhpU7TPKhBamq5X4LvaOcp"
     authorizationParams={{
       redirect_uri: window.location.origin
     }}

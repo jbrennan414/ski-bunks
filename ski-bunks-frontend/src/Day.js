@@ -34,14 +34,10 @@ export default function Day() {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   const allBeds = [
-    "king1_1",
-    "king1_2",
-    "queen1_1",
-    "queen1_2",
-    "queen2_1",
-    "queen2_2",
-    "bunk_1",
-    "bunk_2",
+    "king1",
+    "queen1",
+    "queen2",
+    "bunk",
     "couch"
   ];
 
@@ -109,7 +105,7 @@ export default function Day() {
           bed_id={bed_id} 
           key={bed_id}
           isOccupied={isOccupied} 
-          occupantPhoto= {isOccupied ? occupiedBeds[bed_id].user_picture : null}
+          occupiedBeds={occupiedBeds}
           setSelectedBed={setSelectedBed}
         />
     )
