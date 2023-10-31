@@ -34,7 +34,7 @@ export default function Header(props) {
           </Link>
           {isAuthenticated ? (
             <div className="cart-and-avatar">
-              <Cart />
+              {/* <Cart /> */}
               <IconButton
                 size="large"
                 aria-label="account of current user"

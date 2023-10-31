@@ -15,7 +15,7 @@ export default function Reservations(props) {
 
     if (isLoading) return;
 
-    axios.get(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
         setpageIsLoading(false);
@@ -27,7 +27,7 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    axios.delete(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
+    axios.delete(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
 
         let newReservations = reservations;
@@ -58,7 +58,8 @@ export default function Reservations(props) {
     ];
 
     const dayArray = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-    const date = new Date(`${monthArray[month-1]} ${day}, ${year}`);
+
+    const date = new Date(year, month, day);
 
     return `${dayArray[date.getDay()]} ${monthArray[month-1]} ${date.getDate()}, ${date.getFullYear()}`
   }

@@ -62,6 +62,11 @@ export class SkiBunkBackend extends cdk.Stack {
       },
     });
 
+    new cdk.CfnOutput(this, 'Endpoint', {
+      value: api.url,
+      exportName: 'Endpoint',
+    });
+
     // Define a resource and a GET method to access the Lambda function
     api.root.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda));
     api.root.addMethod('POST', new aws_apigateway.LambdaIntegration(createLambda));

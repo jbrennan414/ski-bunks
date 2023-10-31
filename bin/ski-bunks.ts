@@ -6,4 +6,6 @@ import { SkiBunkFrontend } from '../lib/ski-bunk-frontend';
 
 const app = new cdk.App();
 
-new SkiBunkFrontend(app, 'SkiBunkFrontend').addDependency(new SkiBunkBackend(app, 'SkiBunkBackend'));
+const backendStack = new SkiBunkBackend(app, 'SkiBunkBackend')
+
+new SkiBunkFrontend(app, 'SkiBunkFrontend').addDependency(backendStack)

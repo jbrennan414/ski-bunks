@@ -14,7 +14,7 @@ export default function Calendar(props) {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get(`https://g2ivdcdgv9.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+    axios.get(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
@@ -57,6 +57,7 @@ export default function Calendar(props) {
   const cells = [];
   let day = 1;
   let doubleDate = day;
+  let doubleMonth = month;
 
   if (isLoading || availableBeds.length === 0) {
     return <div>Loading...</div>;
@@ -84,6 +85,12 @@ export default function Calendar(props) {
           doubleDate = day;
         }
 
+        if (month < 10) {
+          doubleMonth = '0' + month;
+        } else {
+          doubleMonth = month;
+        }
+
         const bedsAvailableToday = availableBeds[`${year}${month < 10 ? "0" + month : month}${doubleDate}`].length;
         let colorClass;
 
@@ -95,12 +102,12 @@ export default function Calendar(props) {
           colorClass = "green";
         }
 
-        if (isPastDate(`${year}${month < 10 ? "0" + month : month}${doubleDate}`)) {
+        if (isPastDate(`${year}${doubleMonth}${doubleDate}`)) {
           colorClass = "gray";
         }
 
         cells.push(
-          <Link key={day} style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${month}${doubleDate}`}>
+          <Link key={day} style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${doubleMonth}${doubleDate}`}>
             <div id={day} className={`cell ${colorClass}`}>
               {day}
             </div>

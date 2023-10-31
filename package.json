@@ -5,7 +5,6 @@
     "ski-bunks": "bin/ski-bunks.js"
   },
   "scripts": {
-    "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
