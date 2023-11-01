@@ -10,7 +10,7 @@ export class SkiBunkBackend extends cdk.Stack {
     const dynamoTable = new aws_dynamodb.Table(this, 'SkiBunkDbTable', {
       partitionKey: { name: 'bed_id', type: aws_dynamodb.AttributeType.STRING },
       sortKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING},
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // Not recommended for production
+      removalPolicy: cdk.RemovalPolicy.RETAIN, // Not recommended for production
     });
 
     dynamoTable.addGlobalSecondaryIndex({

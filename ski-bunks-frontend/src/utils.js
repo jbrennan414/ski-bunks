@@ -28,7 +28,7 @@ export const getDayOfWeek = (fullpath) => {
 
     const year = fullpath.substring(0,4);
     const month = convertHumanMonthToInteger(fullpath.substring(4,6));
-        const day = fullpath.substring(6,8);
+    const day = fullpath.substring(6,8);
 
     const date = new Date(year, month, day);
 
@@ -53,7 +53,7 @@ export const getDate = (fullpath) => {
     //Do something with the input
 
     const year = fullpath.substring(0,4);
-    const month = fullpath.substring(4,6);
+    const month = convertHumanMonthToInteger(fullpath.substring(4,6));
     const day = fullpath.substring(6,8);
 
     const date = new Date(year, month, day);
@@ -63,8 +63,6 @@ export const getDate = (fullpath) => {
 }
 
 export const getYear = (fullpath) => {
-    //Do something with the input
-
     const year = fullpath.substring(0,4);
     const month = convertHumanMonthToInteger(fullpath.substring(4,6));
     const day = fullpath.substring(6,8);
@@ -97,9 +95,8 @@ export const getBedName = (bed_id) => {
 
 export const isPastDate = (fullpath) => {
 
-    const newDate = new Date()
     const year = fullpath.substring(0,4);
-    const month = fullpath.substring(4,6);
+    const month = convertHumanMonthToInteger(fullpath.substring(4,6));
     const day = fullpath.substring(6,8);
 
     const date = new Date(year, month, day).getTime();

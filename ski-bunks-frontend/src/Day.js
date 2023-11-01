@@ -26,9 +26,42 @@ export default function Day() {
 
   let params = useParams();
 
-  const [openBeds, setOpenBeds] = useState([]);
-  const [occupiedBeds, setOccupiedBeds] = useState([]);
+  const allBeds = {
+    king1: { 
+      name: "King",
+      capacity: 2,
+      occupantPhotos: [],
+      availableSpots: ["king1_1", "king1_2"]
+    },
+    queen1: {
+      name: "Queen",
+      capacity: 2,
+      occupantPhotos: [],
+      availableSpots: ["queen1_1", "queen1_2"]
+    },
+    queen2: {
+      name: "Queen",
+      capacity: 2,
+      occupantPhotos: [],
+      availableSpots: ["queen2_1", "queen2_2"]
+    },
+    bunk1: {
+      name: "Bunk",
+      capacity: 2,
+      occupantPhotos: [],
+      availableSpots: ["bunk1_1", "bunk1_2"]
+    },
+    couch: {
+      name: "Couch",
+      capacity: 1,
+      occupantPhotos: [],
+      availableSpots: ["couch"]
+    },
+  }
+
+
   const [selectedBed, setSelectedBed] = useState(null);
+  const [beds, setBeds] = useState(allBeds);
   const [pageIsLoading, setPageIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(params.day);
   const [shouldDisplayError, setShouldDisplayError] = useState(false);
@@ -36,13 +69,15 @@ export default function Day() {
 
   const { user, isAuthenticated } = useAuth0();
 
-  const allBeds = [
-    "king1",
-    "queen1",
-    "queen2",
-    "bunk",
-    "couch"
-  ];
+  const getBedByKeyFromSpot = (spot) => {
+    for (const key in allBeds) {
+      if (allBeds[key].availableSpots.includes(spot)) {
+        return key;
+      }
+    }
+    return null; // or throw an error if you prefer
+  }
+  
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -55,16 +90,11 @@ export default function Day() {
 
   function bookStay() {
 
-    if (isGuest(user.email)) {
-      console.log("you are a guest")
-      return
-    }
-
     setPageIsLoading(true);
     const date = window.location.pathname.split("/")[2];
     const bed_id = selectedBed;
 
-    axios.post(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod`, {
+    axios.post(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod`, {
       reservation_date: date,
       bed_id,
       email: user.email,
@@ -74,19 +104,14 @@ export default function Day() {
       .then((response) => {
         console.log(response)
 
-        let newOpenBeds = openBeds;
-        newOpenBeds.splice(newOpenBeds.indexOf(bed_id), 1);
+        const updatedBeds = beds;
 
-        // this is probably bad...but whatever
-        // what I mean is that on a post, we should probably return the update object
-        let newOccupiedBeds = occupiedBeds;
-        newOccupiedBeds[bed_id] = {
-          user_picture: user.picture,
-          user_name: user.name
-        }
+        const bedKey = getBedByKeyFromSpot(bed_id);
 
-        setOccupiedBeds(newOccupiedBeds);
-        setOpenBeds(newOpenBeds);
+        updatedBeds[bedKey].availableSpots = updatedBeds[bedKey].availableSpots.filter((spot) => spot !== bed_id)
+        updatedBeds[bedKey].occupantPhotos.push(user.picture)
+
+        setBeds(updatedBeds);
         setPageIsLoading(false)
         setSelectedBed(null)
 
@@ -98,19 +123,22 @@ export default function Day() {
     });
   }
 
-  function renderBed(bed_id) {
+  function handleSeletedBed(bed_id) {
+    setSelectedBed(beds[bed_id].availableSpots[0])
+  }
+
+  function renderBed(bed_id, i) {
 
     if (pageIsLoading) { return <p>Loading...</p>}
 
-    const isOccupied = !openBeds.includes(bed_id)
+    const thisBed = beds[bed_id];
 
     return (
         <Bed 
-          bed_id={bed_id} 
-          key={bed_id}
-          isOccupied={isOccupied} 
-          occupiedBeds={occupiedBeds}
-          setSelectedBed={setSelectedBed}
+          key={i}
+          bed={thisBed}
+          bed_id={bed_id}
+          setSelectedBed={handleSeletedBed}
         />
     )
   }
@@ -122,11 +150,20 @@ export default function Day() {
     const month = selectedDate.substring(4, 6);
     const day = selectedDate.substring(6, 8);
 
-    axios.get(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
+    axios.get(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?year=${year}&month=${month}&day=${day}`)
       .then((response) => {
-        console.log(response)
-        setOccupiedBeds(response.data.occupiedBeds);
-        setOpenBeds(response.data.openBeds);
+        const reservations = response.data.reservations;
+        const updatedBeds = beds;
+
+        reservations.forEach((reservation) => {
+          const bedKey = getBedByKeyFromSpot(reservation.bed_id);
+
+          updatedBeds[bedKey].availableSpots = updatedBeds[bedKey].availableSpots.filter((spot) => spot !== reservation.bed_id)
+          updatedBeds[bedKey].occupantPhotos.push(reservation.user_picture)
+
+        })
+
+        setBeds(updatedBeds);
         setPageIsLoading(false)
         setSelectedDate(selectedDate)
     }).catch((error) => {
@@ -144,8 +181,8 @@ export default function Day() {
         <p>{`${getDayOfWeek(selectedDate)} ${getMonth(selectedDate)} ${getDate(selectedDate)}, ${getYear(selectedDate)}`}</p>
 
           <div className="bed-container">
-            {allBeds.map((bed) => {
-              return renderBed(bed)
+            {Object.keys(beds).map((bed, i) => {
+              return renderBed(bed, i)
             })}  
           </div>
 

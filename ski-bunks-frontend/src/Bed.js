@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import BedIcon from '@mui/icons-material/Bed';
 import { Avatar, Button } from '@mui/material';
-import { getBedName } from './utils';
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
@@ -22,32 +21,15 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 export default function Bed(props) {
 
-  function isBedFull(bed_id) {
-
-    let bedCapacity;
-
-    switch (bed_id) {
-      case 'couch':
-        bedCapacity = 1;
-        break;
-      default: 
-        bedCapacity = 2;
-        break;
-    }
-
-    const occupiedSpots = Object.keys(props.occupiedBeds).filter((bed) => bed.includes(props.bed_id));
-    const remainingSpots = bedCapacity - occupiedSpots.length;
-    return remainingSpots === 0;
-  }
+  const { name, capacity, occupantPhotos} = props.bed;
+  const { bed_id }= props;
 
   function renderOccupantPhoto() {
 
     let photos = [];
 
-    const occupiedSpots = Object.keys(props.occupiedBeds).filter((bed) => bed.includes(props.bed_id));
-
-    occupiedSpots.forEach((spot, i) => { 
-      photos.push(<Avatar key={i} src={props.occupiedBeds[spot].user_picture} alt="occupant photo" />)
+    occupantPhotos.forEach((photoSrc, i) => { 
+      photos.push(<Avatar key={i} src={photoSrc} alt="occupant photo" />)
     })
 
     return photos
@@ -57,13 +39,14 @@ export default function Bed(props) {
   return (
     <ColorButton variant="contained" 
       startIcon={<BedIcon />} 
-      onClick={() => props.setSelectedBed(props.bed_id)} 
-      disabled={ isBedFull(props.bed_id) } 
+      onClick={() => props.setSelectedBed(bed_id)} 
+      disabled={ capacity === occupantPhotos.length } 
+      key={bed_id}
     >
-      {getBedName(props.bed_id)}
-      <div className="photo-container">
-        {props.isOccupied && renderOccupantPhoto()}
-      </div>
+      {name}
+    <div className="photo-container">
+      {renderOccupantPhoto()}
+    </div>
     </ColorButton>
   );
 }

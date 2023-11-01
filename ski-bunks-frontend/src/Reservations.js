@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-import { getBedName } from './utils';
+import { getBedName, getDate, getDayOfWeek, getMonth, getYear } from './utils';
 
 export default function Reservations(props) {
 
@@ -15,7 +15,7 @@ export default function Reservations(props) {
 
     if (isLoading) return;
 
-    axios.get(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
         setpageIsLoading(false);
@@ -27,7 +27,7 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    axios.delete(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
+    axios.delete(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
 
         let newReservations = reservations;
@@ -48,20 +48,12 @@ export default function Reservations(props) {
 
   function parseDateString(dateString){
 
-    const year = dateString.substring(0,4);
-    const month = dateString.substring(4,6);
-    const day = dateString.substring(6,8);
+    const dayOfWeek = getDayOfWeek(dateString);
+    const month = getMonth(dateString);
+    const day = getDate(dateString);
+    const year = getYear(dateString);
 
-    const monthArray = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-      'October', 'November', 'December'
-    ];
-
-    const dayArray = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-
-    const date = new Date(year, month, day);
-
-    return `${dayArray[date.getDay()]} ${monthArray[month-1]} ${date.getDate()}, ${date.getFullYear()}`
+    return `${dayOfWeek} ${month} ${day}, ${year}`
   }
 
   return (

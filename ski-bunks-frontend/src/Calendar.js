@@ -14,7 +14,7 @@ export default function Calendar(props) {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get(`https://43xrqkj1bc.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+    axios.get(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
