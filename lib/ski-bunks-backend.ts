@@ -8,14 +8,9 @@ export class SkiBunkBackend extends cdk.Stack {
 
     // Create a DynamoDB table
     const dynamoTable = new aws_dynamodb.Table(this, 'SkiBunkDbTable', {
-      partitionKey: { name: 'bed_id', type: aws_dynamodb.AttributeType.STRING },
-      sortKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING},
-      removalPolicy: cdk.RemovalPolicy.RETAIN, // Not recommended for production
-    });
-
-    dynamoTable.addGlobalSecondaryIndex({
-      indexName: 'date-index',
       partitionKey: { name: 'reservation_date', type: aws_dynamodb.AttributeType.STRING },
+      sortKey: { name: 'user_email', type: aws_dynamodb.AttributeType.STRING},
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     dynamoTable.addGlobalSecondaryIndex({
@@ -67,8 +62,15 @@ export class SkiBunkBackend extends cdk.Stack {
       exportName: 'Endpoint',
     });
 
-    // Define a resource and a GET method to access the Lambda function
-    api.root.addMethod('GET', new aws_apigateway.LambdaIntegration(readLambda));
+    const readLambdaIntegration = new aws_apigateway.LambdaIntegration(readLambda);
+    api.root.addMethod('GET', readLambdaIntegration);
+    
+    // get date for calendar
+    const dateResource = api.root.addResource('date');
+    const specificDateResource = dateResource.addResource('{date}');
+    specificDateResource.addMethod('GET', readLambdaIntegration);
+
+
     api.root.addMethod('POST', new aws_apigateway.LambdaIntegration(createLambda));
     api.root.addMethod('DELETE', new aws_apigateway.LambdaIntegration(deleteLambda));
   }

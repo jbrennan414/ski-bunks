@@ -16,6 +16,8 @@ root.render(
   <Auth0Provider
     domain="ski-bunks.us.auth0.com"
     clientId="pgDqVwHh9HWhpU7TPKhBamq5X4LvaOcp"
+    useRefreshTokens={true}
+    cacheLocation='localstorage'
     authorizationParams={{
       redirect_uri: window.location.origin
     }}

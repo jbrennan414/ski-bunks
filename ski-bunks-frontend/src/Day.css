@@ -3,3 +3,12 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
+.reservation-container { 
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+}

@@ -5,6 +5,7 @@ import axios from 'axios';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { getMonthFromInteger, isPastDate } from './utils';
+import { useParams } from "react-router-dom";
 
 export default function Calendar(props) {
 
@@ -14,7 +15,7 @@ export default function Calendar(props) {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    axios.get(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+    axios.get(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);

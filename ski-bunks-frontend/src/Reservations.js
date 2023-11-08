@@ -15,7 +15,7 @@ export default function Reservations(props) {
 
     if (isLoading) return;
 
-    axios.get(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
         setReservations(response.data);
         setpageIsLoading(false);
@@ -27,7 +27,7 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    axios.delete(`https://1w37fsl0x8.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
+    axios.delete(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
       .then((response) => {
 
         let newReservations = reservations;
