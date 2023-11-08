@@ -11,8 +11,8 @@ export default function Calendar(props) {
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);   
   const [year, setYear] = useState(new Date().getFullYear());
-  const [availableBeds, setAvailableBeds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [availableBeds, setAvailableBeds] = useState({});
   
   useEffect(() => {
     axios.get(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
@@ -60,7 +60,7 @@ export default function Calendar(props) {
   let doubleDate = day;
   let doubleMonth = month;
 
-  if (isLoading || availableBeds.length === 0) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -92,12 +92,11 @@ export default function Calendar(props) {
           doubleMonth = month;
         }
 
-        const bedsAvailableToday = availableBeds[`${year}${month < 10 ? "0" + month : month}${doubleDate}`].length;
         let colorClass;
 
-        if (bedsAvailableToday === 0) {
+        if (availableBeds[`${year}${doubleMonth}${doubleDate}`] === 0) {
           colorClass = "red";
-        } else if (bedsAvailableToday === 1) {
+        } else if (availableBeds[`${year}${doubleMonth}${doubleDate}`] === 1) {
           colorClass = "yellow";
         } else {
           colorClass = "green";
