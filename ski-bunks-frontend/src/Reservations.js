@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-import { getBedName, getDate, getDayOfWeek, getMonth, getYear } from './utils';
+import { getDate, getDayOfWeek, getMonth, getYear } from './utils';
 
 export default function Reservations(props) {
 
@@ -27,13 +27,14 @@ export default function Reservations(props) {
 
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    axios.delete(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&bed_id=${reservationToRemove.bed_id}`)
+    console.log("USER email", reservationToRemove)
+    axios.delete(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&user_email=${reservationToRemove.user_email}`)
       .then((response) => {
 
         let newReservations = reservations;
 
         newReservations.forEach(reservation => {
-          if (reservation.bed_id === reservationToRemove.bed_id && reservation.reservation_date === reservationToRemove.reservation_date) {
+          if (reservation.user_email === reservationToRemove.user_email && reservation.reservation_date === reservationToRemove.reservation_date) {
             newReservations.splice(newReservations.indexOf(reservation), 1)
           }
         })
@@ -65,7 +66,6 @@ export default function Reservations(props) {
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
-                <TableCell align="right">Bed</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -78,7 +78,6 @@ export default function Reservations(props) {
                   <TableCell component="th" scope="row">
                     {parseDateString(row.reservation_date)}
                   </TableCell>
-                  <TableCell align="right">{getBedName(row.bed_id)}</TableCell>
                   <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>
                 </TableRow>
               ))}
