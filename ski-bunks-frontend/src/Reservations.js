@@ -15,9 +15,9 @@ export default function Reservations(props) {
 
     if (isLoading) return;
 
-    axios.get(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
+    axios.get(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?user=${user.email}`)
       .then((response) => {
-        setReservations(response.data);
+        sortDates(response.data);
         setpageIsLoading(false);
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
@@ -25,10 +25,32 @@ export default function Reservations(props) {
     });
   }, [isLoading, user]);
 
+  function sortDates(reservationData) {
+
+    const now = new Date();
+
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+    let day = now.getDate();
+
+    month = month.toString().padStart(2, '0');
+    day = day.toString().padStart(2, '0');
+
+    const today = `${year}${month}${day}`;
+
+    reservationData = reservationData.filter(reservation => {
+      return reservation.reservation_date >= today;
+    })
+
+    setReservations(reservationData.sort((a, b) => {
+      return a.reservation_date - b.reservation_date;
+    }))
+
+  }
+
   function deleteReservation(reservationToRemove) {
     setpageIsLoading(true);
-    console.log("USER email", reservationToRemove)
-    axios.delete(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&user_email=${reservationToRemove.user_email}`)
+    axios.delete(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&user_email=${reservationToRemove.user_email}`)
       .then((response) => {
 
         let newReservations = reservations;
@@ -38,8 +60,7 @@ export default function Reservations(props) {
             newReservations.splice(newReservations.indexOf(reservation), 1)
           }
         })
-
-        setReservations(newReservations);
+        sortDates(newReservations);
         setpageIsLoading(false);
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);

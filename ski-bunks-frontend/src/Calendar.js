@@ -9,56 +9,68 @@ import { useParams } from "react-router-dom";
 
 export default function Calendar(props) {
 
-  const [month, setMonth] = useState(new Date().getMonth() + 1);   
-  const [year, setYear] = useState(new Date().getFullYear());
+  const { month, year } = useParams();
+
+  const [selectedMonth, setMonth] = useState(new Date().getMonth() + 1);   
+  const [selectedYear, setYear] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(true);
   const [availableBeds, setAvailableBeds] = useState({});
-  
+
   useEffect(() => {
-    axios.get(`https://fsb2mqq1og.execute-api.us-west-2.amazonaws.com/prod?month=${month}&year=${year}`)
+
+    if (month) {
+      setMonth(parseInt(month));
+    }
+
+    if (year) {
+      setYear(parseInt(year));
+    }
+
+    axios.get(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?month=${selectedMonth}&year=${selectedYear}`)
       .then((response) => {
         setAvailableBeds(response.data);
         setIsLoading(false);
     }).catch((error) => {
       console.log("ERRRRRRROR" , error);
     });
-  }, [month, year]);
+  }, [selectedMonth, selectedYear]);
 
 
-  const daysInMonth = getDaysInMonth(month, year);
-  const startingDay = getStartingDay(month, year);
-  const readableMonth = getMonthFromInteger(month - 1);
+  const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
+  const startingDay = getStartingDay(selectedMonth, selectedYear);
+  const readableMonth = getMonthFromInteger(selectedMonth - 1);
 
-  function getDaysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
+  function getDaysInMonth(selectedMonth, selectedYear) {
+    return new Date(selectedYear, selectedMonth, 0).getDate();
   }
 
-  function getStartingDay(month, year) {
-    // Calculate the starting day of the month (0 for Sunday, 1 for Monday, etc.)
-    const startingDay = new Date(year, month - 1, 1).getDay();
+
+  function getStartingDay(selectedMonth, selectedYear) {
+    // Calculate the starting day of the selectedMonth (0 for Sunday, 1 for Monday, etc.)
+    const startingDay = new Date(selectedYear, selectedMonth - 1, 1).getDay();
     // Ensure the grid starts on Sunday
     return startingDay === 0 ? 7 : startingDay;
   }
 
-  function updateMonth(month){
+  function updateMonth(selectedMonth){
 
-    if (month === 13) {
+    if (selectedMonth === 13) {
       setMonth(1);
-      setYear(year + 1);
+      setYear(selectedYear + 1);
       return;
-    } else if (month === 0) {
+    } else if (selectedMonth === 0) {
       setMonth(12);
-      setYear(year - 1);
+      setYear(selectedYear - 1);
       return;
     } else {
-      setMonth(month);
+      setMonth(selectedMonth);
     }
   }
 
   const cells = [];
   let day = 1;
   let doubleDate = day;
-  let doubleMonth = month;
+  let doubleMonth = selectedMonth;
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -86,28 +98,28 @@ export default function Calendar(props) {
           doubleDate = day;
         }
 
-        if (month < 10) {
-          doubleMonth = '0' + month;
+        if (selectedMonth < 10) {
+          doubleMonth = '0' + selectedMonth;
         } else {
-          doubleMonth = month;
+          doubleMonth = selectedMonth;
         }
 
         let colorClass;
 
-        if (availableBeds[`${year}${doubleMonth}${doubleDate}`] === 0) {
+        if (availableBeds[`${selectedYear}${doubleMonth}${doubleDate}`] === 0) {
           colorClass = "red";
-        } else if (availableBeds[`${year}${doubleMonth}${doubleDate}`] === 1) {
+        } else if (availableBeds[`${selectedYear}${doubleMonth}${doubleDate}`] === 1) {
           colorClass = "yellow";
         } else {
           colorClass = "green";
         }
 
-        if (isPastDate(`${year}${doubleMonth}${doubleDate}`)) {
+        if (isPastDate(`${selectedYear}${doubleMonth}${doubleDate}`)) {
           colorClass = "gray";
         }
 
         cells.push(
-          <Link key={day} style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${year}${doubleMonth}${doubleDate}`}>
+          <Link key={day} style={{ textDecoration: 'none', color: 'white'}} to= {`/day/${selectedYear}${doubleMonth}${doubleDate}`}>
             <div id={day} className={`cell ${colorClass}`}>
               {day}
             </div>
@@ -125,13 +137,13 @@ export default function Calendar(props) {
       <div className="month-nav">
         <NavigateBeforeIcon onClick={() => {
           setIsLoading(true)
-          updateMonth(month - 1)
+          updateMonth(selectedMonth - 1)
         }}/>
 
         <h2>{readableMonth}</h2>
         <NavigateNextIcon onClick={() => {
           setIsLoading(true)
-          updateMonth( month + 1)
+          updateMonth( selectedMonth + 1)
         }}/>
       </div>
       <div className="calendar-grid">{cells}</div>
