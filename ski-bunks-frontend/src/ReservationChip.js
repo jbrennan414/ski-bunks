@@ -28,17 +28,17 @@ export default function ReservationChip(props) {
   };
   return (
     <div key={props.key1}>
-      { props.loggedInUser === props.lessor.email ? (
+      { props.loggedInUser === props.lessor.user_email ? (
         <Chip
-          avatar={<Avatar src={props.lessor.picture} />}
-          label={props.lessor.name}
+          avatar={<Avatar src={props.lessor.user_picture} />}
+          label={props.lessor.user_name}
           deleteIcon={<ArrowDropDownIcon />}
           onDelete={handleClick}
           style={chipStyle}
         /> ) : (
         <Chip
-          avatar={<Avatar src={props.lessor.picture} />}
-          label={props.lessor.name}
+          avatar={<Avatar src={props.lessor.user_picture} />}
+          label={props.lessor.user_name}
           style={chipStyle}
         /> )}
 

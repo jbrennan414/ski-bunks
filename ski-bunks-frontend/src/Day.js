@@ -20,51 +20,51 @@ const Alert = forwardRef(function Alert(props, ref) {
 
 const lessees = [
   {
-    email: "brennanj414@gmail.com",
-    name: "John Brennan",
-    picture:
+    user_email: "brennanj414@gmail.com",
+    user_name: "John Brennan",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocLe1bqDTfA5vNQLPaOiNjEDkUcLh4lChLfA1diQJEQxNdM=s96-c",
   },
   {
-    email: "fisherben09@gmail.com",
-    name: "Ben Fisher",
-    picture:
+    user_email: "fisherben09@gmail.com",
+    user_name: "Ben Fisher",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocJv6jnyqtc7ZE0F6DZzUNPJMRrhJ1bcIvIJ_m95Yqxv=s96-c",
   },
   {
-    email: "lvkordecki@gmail.com",
-    name: "Lindsay Kordecki",
-    picture:
+    user_email: "lvkordecki@gmail.com",
+    user_name: "Lindsay Kordecki",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocJnOJvQcHc30DFsMTcpWox8RXOrKjypImbybGVn-hHA=s96-c",
   },
   {
-    email: "storbecktelbe@gmail.com",
-    name: "Telbe Storbeck",
-    picture:
+    user_email: "storbecktelbe@gmail.com",
+    user_name: "Telbe Storbeck",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocJb1r7fx5Hu2lik4JNi5wWa1H9HJy-aI98mi1as7h58AVI=s96-c",
   },
   {
-    email: "sophia.menick@gmail.com",
-    name: "Sophia Menick",
-    picture:
+    user_email: "sophia.menick@gmail.com",
+    user_name: "Sophia Menick",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocK860Pus1yIIcrjEcz0v_3oeEBCQukncqnaL08sAUa1cw=s96-c",
   },
   {
-    email: "ctraut22@gmail.com",
-    name: "Catherine Traut",
-    picture:
+    user_email: "ctraut22@gmail.com",
+    user_name: "Catherine Traut",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocJ_bsYABo500D-45h9OXc4MTXm_4fPh655upuk35Dsj=s96-c",
   },
   {
-    email: "mjacobson594@gmail.com",
-    name: "Maggie Jacobson",
-    picture:
+    user_email: "mjacobson594@gmail.com",
+    user_name: "Maggie Jacobson",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocIt_NJ9en74gavz0rU8HXvhCf4vh5vP7Q3aYB2obNE-=s96-c",
   },
   {
-    email: "bentraut@gmail.com",
-    name: "Ben Traut",
-    picture:
+    user_email: "bentraut@gmail.com",
+    user_name: "Ben Traut",
+    user_picture:
       "https://lh3.googleusercontent.com/a/ACg8ocIt_NJ9en74gavz0rU8HXvhCf4vh5vP7Q3aYB2obNE-=s96-c",
   },
 ];
@@ -74,7 +74,7 @@ export default function Day() {
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(day);
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState(lessees);
   const [shouldDisplayError, setShouldDisplayError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -85,7 +85,7 @@ export default function Day() {
 
     return lessees.map((lessor, i) => { 
 
-      const isIn = reservations.filter((item) => item.user_email === lessor.email)[0]?.is_in;
+      const isIn = reservations.filter((item) => item.user_email === lessor.user_email)[0]?.is_in;
 
       let email = null;
       if (user) {
@@ -99,6 +99,22 @@ export default function Day() {
         lessor={lessor} 
         isIn={userIsIn1} />
     })
+  }
+
+  function renderGuests() {
+
+    const lessees_emails = lessees.map((item) => item.user_email);
+
+    const otherReservations = reservations.filter((item) => !lessees_emails.includes(item.user_email));
+
+    return otherReservations.map((item, i) => { 
+      return <ReservationChip key1={i}
+        loggedInUser={user.email}
+        userIsIn={item.is_in} 
+        lessor={item} 
+      />
+   })
+
   }
 
   const handleClose = () => {
@@ -126,6 +142,19 @@ export default function Day() {
         let newReservations = reservations;
 
         const userReservation = newReservations.filter((item) => item.user_email === user.email)[0];
+
+        if (!userReservation) {
+          newReservations.push({
+            user_name: user.name,
+            user_picture: user.picture,
+            user_email: user.email,
+            is_in: boolStatus
+          });
+          setReservations(newReservations);
+          setPageIsLoading(false);
+          return;
+        }
+
         userReservation.is_in = boolStatus;
 
         setReservations(newReservations);
@@ -146,7 +175,7 @@ export default function Day() {
     axios
       .post(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod/`, {
         reservation_date: date,
-        email: user.email,
+        email: "fakeEmail@gmail.com",
         name: user.name,
         picture: user.picture,
       })
@@ -158,6 +187,8 @@ export default function Day() {
         newReservations.push({
           user_name: user.name,
           user_picture: user.picture,
+          user_email: "fakeEmail@gmail.com",
+          is_in: true
         });
 
         setReservations(newReservations);
@@ -180,7 +211,6 @@ export default function Day() {
         `https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod/?date=${selectedDate}`
       )
       .then((response) => {
-        console.log("##########", response.data);
 
         setReservations(response.data.reservations);
 
@@ -192,6 +222,28 @@ export default function Day() {
         setPageIsLoading(false);
       });
   }, []);
+
+  let spotsRemaining = 9;
+
+  const lessees_emails = lessees.map((item) => item.user_email);
+
+  lessees.forEach((item) => {
+    const index = reservations.findIndex((reservation) => reservation.user_email === item.user_email);
+
+    if (reservations[index]?.is_in === true) {
+      spotsRemaining--;
+    }
+
+    if (index === -1) {
+      spotsRemaining--;
+    }
+    
+  })
+
+  // count current guests
+  const guests = reservations.filter((item) => !lessees_emails.includes(item.user_email) && item.is_in).length;
+
+  spotsRemaining = spotsRemaining - guests;
 
   return (
     <div>
@@ -212,15 +264,20 @@ export default function Day() {
             selectedDate
           )} ${getDate(selectedDate)}, ${getYear(selectedDate)}`}</p>
 
-          <div className="reservation-container">{renderRezzies()}</div>
+          <div className="reservation-container">
+            {renderRezzies()}
+            {renderGuests()}
+          </div>
+
           {isAuthenticated ? (
             <Button
               variant="contained"
+              disabled={spotsRemaining === 0}
               onClick={() => {
                 bookStay();
               }}
             >
-              {`Join Us!`}
+              {`${spotsRemaining > 0 ? `Room for ${spotsRemaining} ${spotsRemaining == 1 ? `guest` :`guests` }` : `No spots left`}`}
             </Button>
           ) : (
             <Button variant="contained" disabled={true}>
