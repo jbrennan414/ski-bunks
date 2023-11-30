@@ -30,6 +30,7 @@ export default function ReservationChip(props) {
     <div key={props.key1}>
       { props.loggedInUser === props.lessor.user_email ? (
         <Chip
+          key={props.key1}
           avatar={<Avatar src={props.lessor.user_picture} />}
           label={props.lessor.user_name}
           deleteIcon={<ArrowDropDownIcon />}
@@ -37,6 +38,7 @@ export default function ReservationChip(props) {
           style={chipStyle}
         /> ) : (
         <Chip
+          key={props.key1}
           avatar={<Avatar src={props.lessor.user_picture} />}
           label={props.lessor.user_name}
           style={chipStyle}

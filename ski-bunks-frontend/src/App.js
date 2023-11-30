@@ -19,7 +19,6 @@ function App() {
         <Header />
         <Routes>
           <Route index element={<Calendar month={month} setMonth={setMonth} />} />
-          <Route path="year/:year/month/:month" element={<Calendar month={month} setMonth={setMonth} />} />
           <Route path="month/:month" element={<Calendar month={month} setMonth={setMonth} />} />
           <Route path="day/:day" element={<Day />} /> 
           <Route path="reservations" element={<Reservations />} /> 

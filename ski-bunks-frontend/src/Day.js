@@ -93,7 +93,7 @@ export default function Day() {
       }
 
       return <ReservationChip 
-        key1={i} 
+        key={lessor.user_email} 
         loggedInUser={email}
         userIsIn={isIn} 
         lessor={lessor} 
@@ -108,7 +108,8 @@ export default function Day() {
     const otherReservations = reservations.filter((item) => !lessees_emails.includes(item.user_email));
 
     return otherReservations.map((item, i) => { 
-      return <ReservationChip key1={i}
+      return <ReservationChip 
+        key={item.reservation_id}
         loggedInUser={user.email}
         userIsIn={item.is_in} 
         lessor={item} 
@@ -118,6 +119,7 @@ export default function Day() {
   }
 
   const handleClose = () => {
+    setShouldDisplayError(false);
     setAnchorEl(null);
   };
 
@@ -170,24 +172,33 @@ export default function Day() {
   function bookStay() {
 
     setPageIsLoading(true);
+
+    const lessorsEmails = lessees.map((item) => item.user_email);
+
+    if (lessorsEmails.includes(user.email)) {
+      setShouldDisplayError(true);
+      setPageIsLoading(false)
+      setErrorMessage("Select yourself to book a stay");
+      return;
+    }
+
     const date = window.location.pathname.split("/")[2];
 
     axios
       .post(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod/`, {
         reservation_date: date,
-        email: "fakeEmail@gmail.com",
+        email: user.email,
         name: user.name,
         picture: user.picture,
       })
       .then((response) => {
-        console.log(response);
 
         let newReservations = reservations;
 
         newReservations.push({
           user_name: user.name,
           user_picture: user.picture,
-          user_email: "fakeEmail@gmail.com",
+          user_email: user.email,
           is_in: true
         });
 
