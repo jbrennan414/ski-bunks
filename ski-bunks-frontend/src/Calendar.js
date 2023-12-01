@@ -5,26 +5,24 @@ import axios from 'axios';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { getMonthFromInteger, isPastDate } from './utils';
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Calendar(props) {
 
-  const { month, year } = useParams();
+  const location = useLocation();
 
-  const [selectedMonth, setMonth] = useState(new Date().getMonth() + 1);   
-  const [selectedYear, setYear] = useState(new Date().getFullYear());
+  const month = parseInt(location?.state?.month) || new Date().getMonth() + 1;
+  const year = parseInt(location?.state?.year) || new Date().getFullYear();
+
+  const [selectedMonth, setMonth] = useState(month);   
+  const [selectedYear, setYear] = useState(year);
   const [isLoading, setIsLoading] = useState(true);
   const [availableBeds, setAvailableBeds] = useState({});
 
   useEffect(() => {
 
-    if (month) {
-      setMonth(parseInt(month));
-    }
-
-    if (year) {
-      setYear(parseInt(year));
-    }
+    console.log("selected month", selectedMonth)
+    console.log("selected year", selectedYear)
 
     axios.get(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?month=${selectedMonth}&year=${selectedYear}`)
       .then((response) => {
@@ -44,7 +42,6 @@ export default function Calendar(props) {
     return new Date(selectedYear, selectedMonth, 0).getDate();
   }
 
-
   function getStartingDay(selectedMonth, selectedYear) {
     // Calculate the starting day of the selectedMonth (0 for Sunday, 1 for Monday, etc.)
     const startingDay = new Date(selectedYear, selectedMonth - 1, 1).getDay();
@@ -56,11 +53,11 @@ export default function Calendar(props) {
 
     if (selectedMonth === 13) {
       setMonth(1);
-      setYear(selectedYear + 1);
+      setYear(parseInt(selectedYear) + 1);
       return;
     } else if (selectedMonth === 0) {
       setMonth(12);
-      setYear(selectedYear - 1);
+      setYear(parseInt(selectedYear) - 1);
       return;
     } else {
       setMonth(selectedMonth);
@@ -137,13 +134,14 @@ export default function Calendar(props) {
       <div className="month-nav">
         <NavigateBeforeIcon onClick={() => {
           setIsLoading(true)
-          updateMonth(selectedMonth - 1)
+          updateMonth(parseInt(selectedMonth - 1))
         }}/>
 
         <h2>{readableMonth}</h2>
+
         <NavigateNextIcon onClick={() => {
           setIsLoading(true)
-          updateMonth( selectedMonth + 1)
+          updateMonth(parseInt(selectedMonth + 1))
         }}/>
       </div>
       <div className="calendar-grid">{cells}</div>

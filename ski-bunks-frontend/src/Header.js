@@ -27,7 +27,13 @@ export default function Header(props) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar style={{ display:"flex", justifyContent:'space-between' }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
+          <Link 
+            state={{ 
+              month: new Date().getMonth() + 1,
+              year: new Date().getFullYear(),
+             }}
+            to="/" 
+            style={{ textDecoration: 'none', color: 'white'}}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               SkiBunks
             </Typography>

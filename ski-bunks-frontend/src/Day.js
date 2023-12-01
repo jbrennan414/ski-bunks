@@ -69,7 +69,7 @@ const lessees = [
   },
 ];
 
-export default function Day() {
+export default function Day(props) {
   let { day } = useParams();
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
@@ -259,10 +259,10 @@ export default function Day() {
   return (
     <div>
       <Link
-        to={`/year/${selectedDate.substring(
-          0,
-          4
-        )}/month/${selectedDate.substring(4, 6)}`}
+        state={{ 
+          month: selectedDate.substring(4, 6), 
+          year: selectedDate.substring(0, 4) }}
+        to={`/calendar`}
       >
         Back
       </Link>
