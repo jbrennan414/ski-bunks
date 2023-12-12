@@ -5,8 +5,6 @@ import { Avatar, Chip, AppBar, Box, Toolbar, Typography, IconButton, MenuItem, M
 import { Link } from 'react-router-dom';
 import { AccountCircle } from '@mui/icons-material';
 
-import Cart from './Cart';
-
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -40,7 +38,6 @@ export default function Header(props) {
           </Link>
           {isAuthenticated ? (
             <div className="cart-and-avatar">
-              {/* <Cart /> */}
               <IconButton
                 size="large"
                 aria-label="account of current user"

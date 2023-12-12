@@ -62,10 +62,10 @@ const lessees = [
       "https://lh3.googleusercontent.com/a/ACg8ocIt_NJ9en74gavz0rU8HXvhCf4vh5vP7Q3aYB2obNE-=s96-c",
   },
   {
-    user_email: "bentraut@gmail.com",
+    user_email: "trautben@gmail.com",
     user_name: "Ben Traut",
     user_picture:
-      "https://lh3.googleusercontent.com/a/ACg8ocIt_NJ9en74gavz0rU8HXvhCf4vh5vP7Q3aYB2obNE-=s96-c",
+      "https://lh3.googleusercontent.com/a/ACg8ocIR0PO9Urgm7eHB_WxJS6NBIDQehSXwb7_j3XeZDIJa=s96-c",
   },
 ];
 
@@ -89,7 +89,7 @@ export default function Day(props) {
 
       let email = null;
       if (user) {
-        email = user.email;
+        email = user?.email;
       }
 
       return <ReservationChip 
@@ -110,7 +110,7 @@ export default function Day(props) {
     return otherReservations.map((item, i) => { 
       return <ReservationChip 
         key={item.reservation_id}
-        loggedInUser={user.email}
+        loggedInUser={user?.email}
         userIsIn={item.is_in} 
         lessor={item} 
       />
@@ -120,7 +120,6 @@ export default function Day(props) {
 
   const handleClose = () => {
     setShouldDisplayError(false);
-    setAnchorEl(null);
   };
 
   const userIsIn1 = (status) => {

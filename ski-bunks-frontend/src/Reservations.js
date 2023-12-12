@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
@@ -48,26 +49,6 @@ export default function Reservations(props) {
 
   }
 
-  function deleteReservation(reservationToRemove) {
-    setpageIsLoading(true);
-    axios.delete(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?date=${reservationToRemove.reservation_date}&user_email=${reservationToRemove.user_email}`)
-      .then((response) => {
-
-        let newReservations = reservations;
-
-        newReservations.forEach(reservation => {
-          if (reservation.user_email === reservationToRemove.user_email && reservation.reservation_date === reservationToRemove.reservation_date) {
-            newReservations.splice(newReservations.indexOf(reservation), 1)
-          }
-        })
-        sortDates(newReservations);
-        setpageIsLoading(false);
-    }).catch((error) => {
-      console.log("ERRRRRRROR" , error);
-      setpageIsLoading(false);
-    });
-  }
-
   function parseDateString(dateString){
 
     const dayOfWeek = getDayOfWeek(dateString);
@@ -99,7 +80,11 @@ export default function Reservations(props) {
                   <TableCell component="th" scope="row">
                     {parseDateString(row.reservation_date)}
                   </TableCell>
-                  <TableCell align="right"><Button onClick={() => deleteReservation(row)} variant="outlined">Remove</Button></TableCell>
+                  <TableCell align="right">
+                    <Link to={`/day/${row.reservation_date}`}>
+                      <Button variant="outlined">Open</Button>
+                    </Link>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

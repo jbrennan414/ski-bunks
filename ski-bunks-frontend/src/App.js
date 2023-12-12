@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Calendar from './Calendar.js'
 import Reservations from './Reservations.js'
 import Day from './Day.js'
-import { useState, React, useEffect } from 'react';
+import { React } from 'react';
 
 function App() {
 

@@ -21,9 +21,6 @@ export default function Calendar(props) {
 
   useEffect(() => {
 
-    console.log("selected month", selectedMonth)
-    console.log("selected year", selectedYear)
-
     axios.get(`https://hil0sv4jl3.execute-api.us-west-2.amazonaws.com/prod?month=${selectedMonth}&year=${selectedYear}`)
       .then((response) => {
         setAvailableBeds(response.data);
