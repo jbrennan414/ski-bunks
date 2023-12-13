@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+/* html {
+  --primaryBackgroundColor: white;
+  --primaryTextColor: black;
+} */
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #4a4747;
+  }
+  .App {
+    background-color: #4a4747;
+    color: #ffffff;
+  }
+}
