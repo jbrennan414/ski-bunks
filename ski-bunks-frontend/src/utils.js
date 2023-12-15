@@ -119,3 +119,65 @@ export const convertHumanMonthToInteger = (month) => {
     }
 
 }
+
+export const lessees = [
+    {
+      user_email: "brennanj414@gmail.com",
+      user_name: "John Brennan",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocLe1bqDTfA5vNQLPaOiNjEDkUcLh4lChLfA1diQJEQxNdM=s96-c",
+    },
+    {
+      user_email: "fisherben09@gmail.com",
+      user_name: "Ben Fisher",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocJv6jnyqtc7ZE0F6DZzUNPJMRrhJ1bcIvIJ_m95Yqxv=s96-c",
+    },
+    {
+      user_email: "lvkordecki@gmail.com",
+      user_name: "Lindsay Kordecki",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocJnOJvQcHc30DFsMTcpWox8RXOrKjypImbybGVn-hHA=s96-c",
+    },
+    {
+      user_email: "storbecktelbe@gmail.com",
+      user_name: "Telbe Storbeck",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocJb1r7fx5Hu2lik4JNi5wWa1H9HJy-aI98mi1as7h58AVI=s96-c",
+    },
+    {
+      user_email: "sophia.menick@gmail.com",
+      user_name: "Sophia Menick",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocK860Pus1yIIcrjEcz0v_3oeEBCQukncqnaL08sAUa1cw=s96-c",
+    },
+    {
+      user_email: "ctraut22@gmail.com",
+      user_name: "Catherine Traut",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocJ_bsYABo500D-45h9OXc4MTXm_4fPh655upuk35Dsj=s96-c",
+    },
+    {
+      user_email: "mjacobson594@gmail.com",
+      user_name: "Maggie Jacobson",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocIt_NJ9en74gavz0rU8HXvhCf4vh5vP7Q3aYB2obNE-=s96-c",
+    },
+    {
+      user_email: "trautben@gmail.com",
+      user_name: "Ben Traut",
+      user_picture:
+        "https://lh3.googleusercontent.com/a/ACg8ocIR0PO9Urgm7eHB_WxJS6NBIDQehSXwb7_j3XeZDIJa=s96-c",
+    },
+  ];
+
+  export const userIsTenant = (user_email) => {
+
+    const index = lessees.findIndex((lessee) => lessee.user_email === user_email);
+
+    if (index === -1) {
+        return false;
+    } else {
+        return true;
+    }
+  }

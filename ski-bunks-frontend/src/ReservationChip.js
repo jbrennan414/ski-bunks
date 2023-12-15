@@ -34,6 +34,7 @@ export default function ReservationChip(props) {
           avatar={<Avatar src={props.lessor.user_picture} />}
           label={props.lessor.user_name}
           deleteIcon={<ArrowDropDownIcon />}
+          disabled={props.isPastDate}
           onDelete={handleClick}
           style={chipStyle}
         /> ) : (
@@ -41,6 +42,7 @@ export default function ReservationChip(props) {
           key={props.key1}
           avatar={<Avatar src={props.lessor.user_picture} />}
           label={props.lessor.user_name}
+          disabled={props.isPastDate}
           style={chipStyle}
         /> )}
 
