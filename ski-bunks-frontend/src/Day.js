@@ -64,6 +64,7 @@ export default function Day(props) {
         loggedInUser={user?.email}
         userIsIn={item.is_in} 
         lessor={item} 
+        isIn={userIsIn1}
       />
    })
 
