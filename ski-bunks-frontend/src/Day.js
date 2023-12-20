@@ -3,6 +3,7 @@ import React, { useState, useEffect, forwardRef } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useParams } from "react-router-dom";
 import "./Day.css";
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import {
   Button,
   Snackbar,
@@ -209,22 +210,26 @@ export default function Day(props) {
 
   return (
     <div>
-      <Link
-        state={{ 
-          month: selectedDate.substring(4, 6), 
-          year: selectedDate.substring(0, 4) }}
-        to={`/calendar`}
-      >
-        Back
-      </Link>
-
       {pageIsLoading ? (
         <div>Loading...</div>
       ) : (
         <div>
-          <p>{`${getDayOfWeek(selectedDate)} ${getMonth(
-            selectedDate
-          )} ${getDate(selectedDate)}, ${getYear(selectedDate)}`}</p>
+          <div 
+            id="header-line" 
+            style={{ display:'flex', alignItems:'center', justifyContent:'center' }}
+          >
+            <Link
+              state={{ 
+              month: selectedDate.substring(4, 6), 
+              year: selectedDate.substring(0, 4) }}
+              to={`/calendar`}
+            >
+              <NavigateBeforeIcon />
+            </Link>
+            <p>{`${getDayOfWeek(selectedDate)} ${getMonth(
+              selectedDate
+            )} ${getDate(selectedDate)}, ${getYear(selectedDate)}`}</p>
+          </div>
 
           <div className="reservation-container">
             {renderRezzies()}
