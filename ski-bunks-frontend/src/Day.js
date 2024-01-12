@@ -244,7 +244,7 @@ export default function Day(props) {
                 bookStay();
               }}
             >
-              {`${spotsRemaining > 0 ? `Room for ${spotsRemaining} ${spotsRemaining == 1 ? `guest` :`guests` }` : `No spots left`}`}
+              {`${spotsRemaining > 0 ? `Room for ${spotsRemaining} ${spotsRemaining === 1 ? `guest` :`guests` }` : `No spots left`}`}
             </Button>
           ) : (
             <Button variant="contained" disabled={true}>
