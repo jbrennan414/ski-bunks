@@ -123,9 +123,22 @@ export default function Day(props) {
 
   function bookStay() {
 
+    const currentReservations = reservations.filter((item) => item.user_email);
+
+    const currentReservationsEmails = currentReservations.map((item) => item.user_email);
+
+    if (currentReservationsEmails.includes(user.email)) {
+      setShouldDisplayError(true);
+      setPageIsLoading(false)
+      setErrorMessage("Oops! You already have a reservation!");
+      return;
+    }
+
     setPageIsLoading(true);
 
     const lessorsEmails = lessees.map((item) => item.user_email);
+
+    console.log("lessorsEmails", lessorsEmails);
 
     if (lessorsEmails.includes(user.email)) {
       setShouldDisplayError(true);
